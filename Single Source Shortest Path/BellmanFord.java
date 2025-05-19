@@ -20,7 +20,6 @@ class Graph {
 
     void addEdge(int u, int v, int w) {
         edgeList.add(new Edge(u, v, w));
-        // For undirected graph, add both directions
         edgeList.add(new Edge(v, u, w));
     }
 

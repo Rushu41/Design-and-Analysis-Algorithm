@@ -1,4 +1,4 @@
- import java.util.*;
+import java.util.*;
 
 class Edge {
     int u, v, w;
@@ -24,12 +24,14 @@ class Graph {
 
     void addEdge(int u, int v, int w) {
         adj.get(u).add(new Edge(u, v, w));
-        adj.get(v).add(new Edge(v, u, w)); 
+        adj.get(v).add(new Edge(v, u, w));
     }
 
-    void dijkstra(int src) {
+    void dijkstra(int src, int dest) {
         int[] dist = new int[v + 1];
+        int[] parent = new int[v + 1];
         Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(parent, -1);
         dist[src] = 0;
 
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
@@ -48,36 +50,48 @@ class Graph {
 
                 if (dist[node] + weight < dist[next]) {
                     dist[next] = dist[node] + weight;
+                    parent[next] = node;
                     pq.offer(new int[]{next, dist[next]});
                 }
             }
         }
 
-      
-        for (int i = 1; i <= v; i++) {
-            System.out.println("Distance from " + src + " to " + i + ": " +
-                    (dist[i] == Integer.MAX_VALUE ? "INF" : dist[i]));
+        if (dist[dest] == Integer.MAX_VALUE) {
+            System.out.println(-1);
+            return;
         }
+
+        List<Integer> path = new ArrayList<>();
+        for (int at = dest; at != -1; at = parent[at]) {
+            path.add(at);
+        }
+        Collections.reverse(path);
+        for (int node : path) {
+            System.out.print(node + " ");
+        }
+        System.out.println();
     }
 }
 
-public class Dijkstra {
+public class DijkstraShortestPathPrint {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        
-        int c = sc.nextInt(); 
-        int r = sc.nextInt(); 
 
-        Graph g = new Graph(c);
+        int n = sc.nextInt(); // Number of vertices
+        int m = sc.nextInt(); // Number of edges
 
-        for (int i = 0; i < r; i++) {
+        Graph g = new Graph(n);
+
+        for (int i = 0; i < m; i++) {
             int u = sc.nextInt();
             int v = sc.nextInt();
             int w = sc.nextInt();
             g.addEdge(u, v, w);
         }
 
-        int src = sc.nextInt(); // source node
-        g.dijkstra(src);
+        int src = 1;
+        int dest = n;
+
+        g.dijkstra(src, dest);
     }
 }
