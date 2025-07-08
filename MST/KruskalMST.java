@@ -67,7 +67,7 @@ class Graph {
                 totalCost += e.w;
                 union(parent, rank, pu, pv);
             }
-        }
+        }   
 
         System.out.println("Edges in MST:");
         for (Edge e : mst) {
